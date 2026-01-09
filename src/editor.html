@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="lib/mathquill.css"/>
+    <script src="lib/jquery.js"></script>
+    <script src="lib/mathquill.js"></script>
+    <script src="lib/qwebchannel.js"></script>
+    <style>
+        @font-face {
+            font-family: Symbola;
+            src: url(lib/font/Symbola.woff2);
+        }
+        body {
+            background-color: transparent;
+            margin: 0;
+            padding: 10px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            height: 100vh;
+            font-family: sans-serif;
+        }
+
+        #math-field {
+            width: 100%;
+            font-size: 24px;
+            border: none;
+            background: white;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            padding: 10px;
+        }
+
+        .mq-editable-field {
+            border: none !important;
+            outline: none !important;
+        }
+
+        .mq-root-block {
+            border: none !important;
+            box-shadow: none !important;
+        }
+
+        #status {
+            position: absolute;
+            top: 0;
+            left: 0;
+            font-size: 10px;
+            color: red;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="status"></div>
+    <span id="math-field"></span>
+
+    <script>
+        function log(msg) {
+            document.getElementById('status').innerText = msg;
+            console.log(msg);
+        }
+
+        window.onerror = function (msg, url, line) {
+            log("Error: " + msg + " " + line);
+        };
+
+        // Wait for load
+        window.onload = function () {
+            if (typeof MathQuill === 'undefined') {
+                log("MathQuill not loaded. Check internet.");
+                return;
+            }
+
+            var MQ = MathQuill.getInterface(2);
+            var mathFieldSpan = document.getElementById('math-field');
+            var latexField = MQ.MathField(mathFieldSpan, {
+                spaceBehavesLikeTab: true,
+                handlers: {
+                    edit: function () {
+                    },
+                    enter: function () {
+                        if (window.backend) {
+                            window.backend.submit_latex(latexField.latex());
+                        } else {
+                            log("Backend not connected");
+                        }
+                    }
+                }
+            });
+
+            // Expose for python
+            window.latexField = latexField;
+
+            // Global key handler
+            document.addEventListener('keydown', function (e) {
+                if (e.key === 'Escape') {
+                    log("Escape pressed");
+                    if (window.backend) {
+                        window.backend.cancel();
+                    } else {
+                        log("Backend missing on Escape");
+                    }
+                }
+            });
+
+            // Focus immediately
+            latexField.focus();
+
+            // Expose for python focus calls
+            window.latexField = latexField;
+
+            if (typeof QWebChannel !== 'undefined') {
+                new QWebChannel(qt.webChannelTransport, function (channel) {
+                    window.backend = channel.objects.backend;
+                    log("Connected");
+                });
+            } else {
+                log("QWebChannel lib missing");
+            }
+
+            // Re-focus helper
+            document.body.onclick = function () {
+                latexField.focus();
+            };
+        };
+    </script>
+</body>
+
+</html>
