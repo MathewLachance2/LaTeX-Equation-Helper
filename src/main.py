@@ -1,11 +1,10 @@
 import sys
 import threading
 import keyboard
-from PySide6.QtWidgets import QApplication, QSystemTrayIcon, QMenu
-from PySide6.QtCore import Signal, QObject, Slot
-from PySide6.QtGui import QIcon, QPixmap, QPainter, QColor
+from PySide6.QtWidgets import QApplication, QMessageBox
+from PySide6.QtCore import Signal, QObject, QSharedMemory
 
-from gui import OverlayWindow 
+from gui import OverlayWindow, ControlWindow
 
 class HotkeyListener(QObject):
     show_signal = Signal()
@@ -33,83 +32,40 @@ class HotkeyListener(QObject):
         print("Hotkey triggered!")
         self.show_signal.emit()
 
-def create_icon(color):
-    """Creates a simple circular icon with the given color."""
-    pixmap = QPixmap(64, 64)
-    pixmap.fill(QColor("transparent"))
-    painter = QPainter(pixmap)
-    painter.setBrush(QColor(color))
-    painter.setPen(QColor("transparent")) # No border
-    painter.drawEllipse(0, 0, 64, 64)
-    painter.end()
-    return QIcon(pixmap)
-
-class SystemTrayApp(QObject):
-    def __init__(self, app, listener, window):
-        super().__init__()
-        self.app = app
-        self.listener = listener
-        self.window = window
-
-        # Ensure app doesn't close when window closes
-        self.app.setQuitOnLastWindowClosed(False)
-
-        # Create Tray Icon
-        self.tray_icon = QSystemTrayIcon()
-        self.icon_active = create_icon("#4CAF50") # Green
-        self.icon_inactive = create_icon("#F44336") # Red
-        
-        self.tray_icon.setIcon(self.icon_active)
-        self.tray_icon.setVisible(True)
-        self.tray_icon.setToolTip("LaTeX Equation Helper")
-
-        # Create Menu
-        self.menu = QMenu()
-        
-        # Actions
-        self.toggle_action = self.menu.addAction("Active")
-        self.toggle_action.setCheckable(True)
-        self.toggle_action.setChecked(True)
-        self.toggle_action.triggered.connect(self.toggle_active)
-        
-        self.menu.addSeparator()
-        
-        self.quit_action = self.menu.addAction("Quit")
-        self.quit_action.triggered.connect(self.quit_app)
-        
-        self.tray_icon.setContextMenu(self.menu)
-
-        # Start Listening
-        self.listener.start()
-
-    def toggle_active(self):
-        if self.toggle_action.isChecked():
-            self.listener.start()
-            self.tray_icon.setIcon(self.icon_active)
-            self.tray_icon.setToolTip("LaTeX Equation Helper (Active)")
-        else:
-            self.listener.stop()
-            self.tray_icon.setIcon(self.icon_inactive)
-            self.tray_icon.setToolTip("LaTeX Equation Helper (Inactive)")
-
-    def quit_app(self):
-        self.listener.stop()
-        self.tray_icon.hide() # Cleanup icon
-        self.app.quit()
-
 def main():
+    # Enable High DPI Scaling
+    from PySide6.QtCore import Qt
+    QApplication.setAttribute(Qt.AA_EnableHighDpiScaling)
+    QApplication.setAttribute(Qt.AA_UseHighDpiPixmaps)
+
     app = QApplication(sys.argv)
+    
+    # Single Instance Check
+    shared_memory = QSharedMemory("LaTeXEquationHelperInstanceID")
+    if not shared_memory.create(1):
+        # Already exists
+        msg = QMessageBox()
+        msg.setIcon(QMessageBox.Warning)
+        msg.setWindowTitle("Already Running")
+        msg.setText("LaTeX Equation Helper is already running.")
+        msg.exec()
+        sys.exit(0)
     
     print("Equation Tool Started...")
     
+    # Create windows
     listener = HotkeyListener()
-    window = OverlayWindow()
+    overlay_window = OverlayWindow()
+    control_window = ControlWindow()
     
-    # Connect signal to window show slot
-    listener.show_signal.connect(window.activate)
-
-    # Initialize System Tray
-    tray = SystemTrayApp(app, listener, window)
+    # Connect signals
+    listener.show_signal.connect(overlay_window.activate)
+    
+    # Start Listening immediately
+    listener.start()
+    
+    # Show Control Window
+    control_window.show()
     
     sys.exit(app.exec())
 
