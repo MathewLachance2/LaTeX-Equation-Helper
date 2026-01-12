@@ -54,3 +54,5 @@ The application is built using **Python 3.14** and **PySide6 (Qt for Python)**. 
 The project is packaged using **PyInstaller**.
 *   **Command**: `pyinstaller --onefile --windowed ...`
 *   **Result**: A monolithic `.exe` file that bundles the Python interpreter, Qt libraries, and all project assets (HTML/CSS/Fonts) into a temporary filesystem (`_MEIPASS`), allowing it to run on any Windows machine.
+
+### Known Problems
