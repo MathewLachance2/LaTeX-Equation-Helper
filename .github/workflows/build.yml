@@ -42,6 +42,15 @@ jobs:
         name: Release ${{ github.ref_name }}
         draft: false
         prerelease: false
+        body: |
+          ## 🚀 Quick Start
+          1.  **Download** the `LaTeXHelper.exe` below.
+          2.  **Run** the file. (See note below if your browser warns you).
+          3.  Press **`Ctrl + Alt + E`** anywhere to start typing math!
+          
+          ---
+          *Note: This is a standalone portable executable. No installation required.*
+
 
     - name: Upload Build Artifact
       uses: actions/upload-artifact@v4

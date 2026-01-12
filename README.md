@@ -23,6 +23,16 @@ The recommended way to get the latest version is to download it from the **Relea
 
 *Note: No installation is needed. Just run the `.exe` file.*
 
+> [!WARNING]
+> **"This file is dangerous?" / "Blocked by Browser"**
+> 
+> Because this is a free, open-source tool and not digitally signed (which costs money), browsers like Chrome or Edge may flag it as "rare" or "dangerous". **This is a false alarm.**
+> 
+> **To bypass:**
+> 1.  Click the "Three Dots" or "Show details".
+> 2.  Select **"Keep"** -> **"Show more"** -> **"Keep anyway"**.
+> 3.  When running the app, if Windows says "Protected your PC", click **"More Info"** -> **"Run Anyway"**.
+
 ## How to Run
 
 1.  Navigate to the folder where you extracted the app (or the `dist` folder if building locally).
