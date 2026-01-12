@@ -4,10 +4,13 @@ __pycache__/
 
 # PyInstaller
 build/
-*.spec
+
 
 # VS Code
 .vscode/
 
 # Project specific
 file_version_info.txt
+
+# Build Artifacts
+dist/
