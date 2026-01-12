@@ -10,7 +10,7 @@ build/
 .vscode/
 
 # Project specific
-file_version_info.txt
+
 
 # Build Artifacts
 dist/
