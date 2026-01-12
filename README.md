@@ -13,9 +13,21 @@ A robust, "Word-like" desktop equation editor that allows you to visually edit m
 -   **Standardized**: Produces clean, compatible LaTeX code.
 -   **Portable**: Distributed as a single, standalone executable file. No Python installation required.
 
+## Installation (Downloading the App)
+
+The recommended way to get the latest, most compatible version is to download the automated build from GitHub.
+
+1.  **Go to the Actions Tab**: Navigate to the [Actions](../../actions) tab on the GitHub repository.
+2.  **Select Latest Run**: Click on the most recent run at the top of the list (look for a green checkmark).
+3.  **Download Artifact**: Scroll down to the **Artifacts** section and click on `LaTeXHelper-Executable`.
+4.  **Extract**: The downloaded file will be a `.zip`. Extract it to find the `.exe`.
+
+*Note: In the future, stable versions may be published to the "Releases" section on the right-hand side of the repo.*
+
 ## How to Run
 
-1.  Navigate to the `dist` folder.
+1.  Navigate to the folder where you extracted the app (or the `dist` folder if building locally).
+
 2.  Double-click **`LaTeXHelper.exe`**.
 3.  A small "Control Window" will appear, indicating the app is running.
     *   *Note*: The app enforces a "Single Instance" rule. If you try to run it twice, it will warn you.
@@ -24,6 +36,23 @@ A robust, "Word-like" desktop equation editor that allows you to visually edit m
 6.  Type your equation.
 7.  Press **Enter** to finish and copy to clipboard.
 8.  To quit, simply close the "Control Window".
+
+## Visual Demo
+How to use the tool:
+
+1.  **Activate**: Press `Ctrl + Alt + E`.
+2.  **Write**: Type your equation naturally. Commands like `\integral` or `\sum` render instantly.
+    
+    ![Writing Example](assets/writing_example.png)
+
+3.  **Submit**: Press **Enter**. The result is converted to LaTeX and ready to paste.
+    
+    ![Output Example](assets/output_example.png)
+
+    *Example Output:*
+    ```latex
+    \int_{x=1}^{x=5}e^{-x^2}+\frac{\phi}{\Delta T_i}dx
+    ```
 
 ## How it Works (Technical Overview)
 
@@ -55,4 +84,21 @@ The project is packaged using **PyInstaller**.
 *   **Command**: `pyinstaller --onefile --windowed ...`
 *   **Result**: A monolithic `.exe` file that bundles the Python interpreter, Qt libraries, and all project assets (HTML/CSS/Fonts) into a temporary filesystem (`_MEIPASS`), allowing it to run on any Windows machine.
 
-### Known Problems
+## Maintainer Guide: Creating a Release
+
+To publish a new version to the **Releases** section:
+
+1.  **Commit your changes** as usual.
+2.  **Tag the commit** with a version number (must start with `v`).
+    ```bash
+    git tag v1.0.0
+    ```
+3.  **Push the tag** to GitHub.
+    ```bash
+    git push origin v1.0.0
+    ```
+4.  **Wait**: The GitHub Action will automatically:
+    *   Build the executable.
+    *   Create a release named "Release v1.0.0".
+    *   Upload the 200MB+ executable to that release.
+

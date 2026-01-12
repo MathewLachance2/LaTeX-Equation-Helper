@@ -168,7 +168,7 @@ class OverlayWindow(QMainWindow):
         self.webview.setUrl(QUrl.fromLocalFile(file_path))
         
         self.layout.addWidget(self.webview)
-        self.resize(400, 100)
+        self.resize(600, 200)
 
     def activate(self):
         # Fix: Prevent multiple activations if already visible
