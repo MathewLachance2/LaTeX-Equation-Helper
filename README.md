@@ -15,14 +15,13 @@ A robust, "Word-like" desktop equation editor that allows you to visually edit m
 
 ## Installation (Downloading the App)
 
-The recommended way to get the latest, most compatible version is to download the automated build from GitHub.
+The recommended way to get the latest version is to download it from the **Releases** page.
 
-1.  **Go to the Actions Tab**: Navigate to the [Actions](../../actions) tab on the GitHub repository.
-2.  **Select Latest Run**: Click on the most recent run at the top of the list (look for a green checkmark).
-3.  **Download Artifact**: Scroll down to the **Artifacts** section and click on `LaTeXHelper-Executable`.
-4.  **Extract**: The downloaded file will be a `.zip`. Extract it to find the `.exe`.
+1.  **Go to Releases**: Click on **[Releases](../../releases)** on the right-hand sidebar of the repository page.
+2.  **Select Latest Version**: Click on the top release (e.g., `v1.0.0`).
+3.  **Download**: In the **Assets** section, click on `LaTeXHelper.exe` to download the tool.
 
-*Note: In the future, stable versions may be published to the "Releases" section on the right-hand side of the repo.*
+*Note: No installation is needed. Just run the `.exe` file.*
 
 ## How to Run
 
@@ -101,4 +100,6 @@ To publish a new version to the **Releases** section:
     *   Build the executable.
     *   Create a release named "Release v1.0.0".
     *   Upload the 200MB+ executable to that release.
+
+
 
