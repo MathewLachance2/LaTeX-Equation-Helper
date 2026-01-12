@@ -2,9 +2,9 @@ name: Build LaTeX Helper
 
 on:
   push:
-    branches: [ "main", "master" ]
+    branches: [ "main", "master", "git-action-testing" ]
   pull_request:
-    branches: [ "main", "master" ]
+    branches: [ "main", "master", "git-action-testing" ]
   workflow_dispatch:
 
 jobs:
